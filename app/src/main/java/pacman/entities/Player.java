@@ -11,42 +11,33 @@ import pacman.components.KeyHandler;
 
 public class Player extends Entity {
     private BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    private Direction direction;
 
-    public enum Direction {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT
-    }
-
-    public Player(int x, int y, int speed) {
-        super(x, y, speed);
+    public Player(int x, int y, int speed, Direction direction) {
+        super(x, y, speed, direction);
         getPlayerImage();
-        direction = Direction.LEFT;
     }
     
     public void update(KeyHandler handler) {
         if (handler.getUpPressed() && !playerIsHorizontallyBetween()) {
             setWorldY(getWorldY() - getSpeed());
-            direction = Direction.UP;
+            setDirection(Direction.UP);
         } else if (handler.getDownPressed() && !playerIsHorizontallyBetween()) {
             setWorldY(getWorldY() + getSpeed());
-            direction = Direction.DOWN;
+            setDirection(Direction.DOWN);
         } else if (handler.getLeftPressed() && !playerIsVerticallyBetween()) {
             setWorldX(getWorldX() - getSpeed());
-            direction = Direction.LEFT;
+            setDirection(Direction.LEFT);
         } else if (handler.getRightPressed() && !playerIsVerticallyBetween()) {
             setWorldX(getWorldX() + getSpeed());
-            direction = Direction.RIGHT;
+            setDirection(Direction.RIGHT);
         } else if (playerIsHorizontallyBetween()) {
-            if (direction == Direction.LEFT) {
+            if (getDirection() == Direction.LEFT) {
                 if (getWorldX() - getSpeed() < nearest16X()) {
                     setWorldX(nearest16X());
                 } else {
                     setWorldX(getWorldX() - getSpeed());
                 }
-            } else if (direction == Direction.RIGHT) { 
+            } else if (getDirection() == Direction.RIGHT) { 
                 if (getWorldX() + getSpeed() > nearest16X()) {
                     setWorldX(nearest16X());
                 } else {
@@ -54,13 +45,13 @@ public class Player extends Entity {
                 }
             }
         } else if (playerIsVerticallyBetween()) {
-            if (direction == Direction.UP) {
+            if (getDirection() == Direction.UP) {
                 if (getWorldY() - getSpeed() < nearest16Y()) {
                     setWorldY(nearest16Y());
                 } else {
                     setWorldY(getWorldY() - getSpeed());
                 }
-            } else if (direction == Direction.DOWN) {
+            } else if (getDirection() == Direction.DOWN) {
                 if (getWorldY() + getSpeed() > nearest16Y()) {
                     setWorldY(nearest16Y());
                 } else {
@@ -69,7 +60,9 @@ public class Player extends Entity {
             }
         }
 
+        updateMapCoordinates();
 
+        System.out.println(getMapX() + " " + getMapY());
 
         updateSprites();
     }
@@ -82,7 +75,7 @@ public class Player extends Entity {
      * playerIsHorizontallyBetween() returns true
      * If a player is between A and C
      * playerIsVerticallyBetween() returns true
-     * If a player is in the middle of a tile
+     * If a player is exactly on a tile
      * playerIsOnTile() returns true
      */
 
@@ -94,36 +87,8 @@ public class Player extends Entity {
         return (getWorldY() % GamePanel.TILE_SIZE != 0);
     }
 
-    private int nearest16X() {
-        if (direction == Direction.RIGHT) {
-            for (int i = getWorldX(); ; i++) {
-                if (i % GamePanel.TILE_SIZE == 0) {
-                    return i;
-                }
-            }
-        } else {
-            for (int i = getWorldX(); ; i--) {
-                if (i % GamePanel.TILE_SIZE == 0) {
-                    return i;
-                }
-            }
-        }
-    }
-
-    private int nearest16Y() {
-        if (direction == Direction.DOWN) {
-            for (int i = getWorldY(); ; i++) {
-                if (i % GamePanel.TILE_SIZE == 0) {
-                    return i;
-                }
-            }
-        } else {
-            for (int i = getWorldY(); ; i--) {
-                if (i % GamePanel.TILE_SIZE == 0) {
-                    return i;
-                }
-            }
-        }
+    private boolean playerIsOnTile() {
+        return (!playerIsHorizontallyBetween() && !playerIsVerticallyBetween());
     }
 
     public void getPlayerImage() {
@@ -143,7 +108,7 @@ public class Player extends Entity {
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
-        switch (direction) {
+        switch (getDirection()) {
             case UP:
                 if (getSpriteNum() == 1) {
                     image = up1;

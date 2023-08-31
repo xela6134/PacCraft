@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import pacman.entities.Player;
+import pacman.entities.Entity.Direction;
 import pacman.tiles.TileManager;
 
 /**
@@ -33,7 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     TileManager manager = new TileManager(this);
     KeyHandler handler = new KeyHandler();
-    Player player = new Player(3, 4, DEFAULT_PLAYER_SPEED);
+    Player player = new Player(0, 0, DEFAULT_PLAYER_SPEED, Direction.LEFT);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));

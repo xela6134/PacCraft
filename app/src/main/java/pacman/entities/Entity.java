@@ -9,12 +9,21 @@ public abstract class Entity {
     private int spriteCounter = 0;
     private int spriteNum = 1;
     private Position position;
+    private Direction direction;
 
-    public Entity(int x, int y, int speed) {
+    public enum Direction {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
+    }
+
+    public Entity(int x, int y, int speed, Direction direction) {
         this.worldX = x * 32;
         this.worldY = y * 32;
         this.speed = speed;
         this.position = new Position(x, y);
+        this.direction = direction;
     }
 
     public int getWorldX() {
@@ -23,6 +32,14 @@ public abstract class Entity {
 
     public int getWorldY() {
         return worldY;
+    }
+
+    public int getMapX() {
+        return position.getMapX();
+    }
+
+    public int getMapY() {
+        return position.getMapY();
     }
 
     public int getSpeed() {
@@ -39,6 +56,10 @@ public abstract class Entity {
 
     public Position getPosition() {
         return position;
+    }
+
+    public Direction getDirection() {
+        return direction;
     }
 
     public void setWorldX(int x) {
@@ -61,6 +82,14 @@ public abstract class Entity {
         }
     }
 
+    public void setMapX(int mapX) {
+        position.setMapX(mapX);
+    }
+
+    public void setMapY(int mapY) {
+        position.setMapY(mapY);
+    }
+
     public void setSpeed(int speed) {
         this.speed = speed;
     } 
@@ -71,6 +100,10 @@ public abstract class Entity {
 
     public void setSpriteNum(int spriteNum) {
         this.spriteNum = spriteNum;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     /**
@@ -86,6 +119,68 @@ public abstract class Entity {
                 setSpriteNum(1);
             }
             setSpriteCounter(0);
+        }
+    }
+
+    /**
+     * Sets map position right before (or when exactly arriving)
+     * on the coordinate directly
+     */
+    public void updateMapCoordinates() {
+        if (getWorldX() % 32 == 0 && getWorldY() % 32 == 0) {
+            position.setMapX(getWorldX() / 32);
+            position.setMapY(getWorldY() / 32);
+            return;
+        }
+
+        if (direction == Direction.UP) {
+            if (getWorldY() - getSpeed() <= nearest16Y()) {
+                position.setMapY(getMapY() - 1);
+            }
+        } else if (direction == Direction.DOWN) {
+            if (getWorldY() + getSpeed() >= nearest16Y()) {
+                position.setMapY(getMapY() + 1);
+            }
+        } else if (direction == Direction.LEFT) {
+            if (getWorldX() - getSpeed() <= nearest16X()) {
+                position.setMapX(getMapX() - 1);
+            }
+        } else if (direction == Direction.RIGHT) {
+            if (getWorldX() + getSpeed() >= nearest16X()) {
+                position.setMapX(getMapX() + 1);
+            }
+        }
+    }
+
+    public int nearest16X() {
+        if (getDirection() == Direction.RIGHT) {
+            for (int i = getWorldX(); ; i++) {
+                if (i % GamePanel.TILE_SIZE == 0) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = getWorldX(); ; i--) {
+                if (i % GamePanel.TILE_SIZE == 0) {
+                    return i;
+                }
+            }
+        }
+    }
+
+    public int nearest16Y() {
+        if (getDirection() == Direction.DOWN) {
+            for (int i = getWorldY(); ; i++) {
+                if (i % GamePanel.TILE_SIZE == 0) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = getWorldY(); ; i--) {
+                if (i % GamePanel.TILE_SIZE == 0) {
+                    return i;
+                }
+            }
         }
     }
 }

@@ -14,19 +14,19 @@ public class Position {
         this.mapY = mapY;
     }
 
-    public int getWorldX() {
+    public int getMapX() {
         return mapX;
     }
 
-    public int getWorldY() {
+    public int getMapY() {
         return mapY;
     }
 
-    public void setWorldX(int mapX) {
+    public void setMapX(int mapX) {
         this.mapX = mapX;
     }
 
-    public void setWorldY(int mapY) {
+    public void setMapY(int mapY) {
         this.mapY = mapY;
     }
 }
