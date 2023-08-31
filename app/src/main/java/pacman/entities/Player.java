@@ -6,68 +6,64 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import pacman.components.GameMap;
 import pacman.components.GamePanel;
 import pacman.components.KeyHandler;
 
 public class Player extends Entity {
+    public static final int DEFAULT_PLAYER_SPEED = 3;
+
     private BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 
-    public Player(int x, int y, int speed, Direction direction) {
-        super(x, y, speed, direction);
+    public Player(int x, int y, int speed, Direction direction, GameMap map) {
+        super(x, y, speed, direction, map);
         getPlayerImage();
     }
     
     public void update(KeyHandler handler) {
+        System.out.println(getSpeed());
         if (handler.getUpPressed() && !playerIsHorizontallyBetween()) {
-            setWorldY(getWorldY() - getSpeed());
-            setDirection(Direction.UP);
+            moveUp(false);
         } else if (handler.getDownPressed() && !playerIsHorizontallyBetween()) {
-            setWorldY(getWorldY() + getSpeed());
-            setDirection(Direction.DOWN);
+            moveDown(false);
         } else if (handler.getLeftPressed() && !playerIsVerticallyBetween()) {
-            setWorldX(getWorldX() - getSpeed());
-            setDirection(Direction.LEFT);
+            moveLeft(false);
         } else if (handler.getRightPressed() && !playerIsVerticallyBetween()) {
-            setWorldX(getWorldX() + getSpeed());
-            setDirection(Direction.RIGHT);
+            moveRight(false);
         } else if (playerIsHorizontallyBetween()) {
             if (getDirection() == Direction.LEFT) {
-                if (getWorldX() - getSpeed() < nearest16X()) {
-                    setWorldX(nearest16X());
+                if (getWorldX() - getSpeed() < nearest32X()) {
+                    moveLeft(true);
                 } else {
-                    setWorldX(getWorldX() - getSpeed());
+                    moveLeft(false);
                 }
             } else if (getDirection() == Direction.RIGHT) { 
-                if (getWorldX() + getSpeed() > nearest16X()) {
-                    setWorldX(nearest16X());
+                if (getWorldX() + getSpeed() > nearest32X()) {
+                    moveRight(true);
                 } else {
-                    setWorldX(getWorldX() + getSpeed());
+                    moveRight(false);
                 }
             }
         } else if (playerIsVerticallyBetween()) {
             if (getDirection() == Direction.UP) {
-                if (getWorldY() - getSpeed() < nearest16Y()) {
-                    setWorldY(nearest16Y());
+                if (getWorldY() - getSpeed() < nearest32Y()) {
+                    moveUp(true);
                 } else {
-                    setWorldY(getWorldY() - getSpeed());
+                    moveUp(false);
                 }
             } else if (getDirection() == Direction.DOWN) {
-                if (getWorldY() + getSpeed() > nearest16Y()) {
-                    setWorldY(nearest16Y());
+                if (getWorldY() + getSpeed() > nearest32Y()) {
+                    moveDown(true);
                 } else {
-                    setWorldY(getWorldY() + getSpeed());
+                    moveDown(false);
                 }
             }
         }
 
-        updateMapCoordinates();
-
-        System.out.println(getMapX() + " " + getMapY());
-
         updateSprites();
     }
 
-    /**
+    /*
      * Assume there are tiles such as
      * A B
      * C D
@@ -75,8 +71,6 @@ public class Player extends Entity {
      * playerIsHorizontallyBetween() returns true
      * If a player is between A and C
      * playerIsVerticallyBetween() returns true
-     * If a player is exactly on a tile
-     * playerIsOnTile() returns true
      */
 
     private boolean playerIsHorizontallyBetween() {
@@ -85,10 +79,6 @@ public class Player extends Entity {
 
     private boolean playerIsVerticallyBetween() {
         return (getWorldY() % GamePanel.TILE_SIZE != 0);
-    }
-
-    private boolean playerIsOnTile() {
-        return (!playerIsHorizontallyBetween() && !playerIsVerticallyBetween());
     }
 
     public void getPlayerImage() {

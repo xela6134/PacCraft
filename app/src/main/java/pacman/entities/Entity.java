@@ -1,15 +1,19 @@
 package pacman.entities;
 
+import pacman.components.GameMap;
 import pacman.components.GamePanel;
 import pacman.components.Position;
+import pacman.tiles.Tile;
 
 public abstract class Entity {
     private int worldX, worldY;
     private int speed;
+    private int defaultSpeed;
     private int spriteCounter = 0;
     private int spriteNum = 1;
     private Position position;
     private Direction direction;
+    private GameMap map;
 
     public enum Direction {
         UP,
@@ -18,12 +22,14 @@ public abstract class Entity {
         RIGHT
     }
 
-    public Entity(int x, int y, int speed, Direction direction) {
+    public Entity(int x, int y, int speed, Direction direction, GameMap map) {
         this.worldX = x * 32;
         this.worldY = y * 32;
         this.speed = speed;
+        this.defaultSpeed = speed;
         this.position = new Position(x, y);
         this.direction = direction;
+        this.map = map;
     }
 
     public int getWorldX() {
@@ -46,6 +52,10 @@ public abstract class Entity {
         return speed;
     }
 
+    public int getDefaultSpeed() {
+        return defaultSpeed;
+    }
+
     public int getSpriteCounter() {
         return spriteCounter;
     }
@@ -60,6 +70,10 @@ public abstract class Entity {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public Tile getMapTile(int x, int y) {
+        return map.getTile(x, y);
     }
 
     public void setWorldX(int x) {
@@ -107,7 +121,7 @@ public abstract class Entity {
     }
 
     /**
-     * Updates the animation of entities automatically
+     * Updates the animation of entities automatically.  
      * Default FPS is 60, and animation updates itself every 10 ticks
      */
     public void updateSprites() {
@@ -134,25 +148,31 @@ public abstract class Entity {
         }
 
         if (direction == Direction.UP) {
-            if (getWorldY() - getSpeed() <= nearest16Y()) {
+            if (getWorldY() % GamePanel.TILE_SIZE <= speed) {
                 position.setMapY(getMapY() - 1);
+                getMapTile(getMapX(), getMapY()).onOverlap(this);
             }
         } else if (direction == Direction.DOWN) {
-            if (getWorldY() + getSpeed() >= nearest16Y()) {
+            if (getWorldY() % GamePanel.TILE_SIZE >= GamePanel.TILE_SIZE - speed) {
                 position.setMapY(getMapY() + 1);
+                getMapTile(getMapX(), getMapY()).onOverlap(this);
             }
         } else if (direction == Direction.LEFT) {
-            if (getWorldX() - getSpeed() <= nearest16X()) {
+            if (getWorldX() % GamePanel.TILE_SIZE <= speed) {
                 position.setMapX(getMapX() - 1);
+                getMapTile(getMapX(), getMapY()).onOverlap(this);
             }
         } else if (direction == Direction.RIGHT) {
-            if (getWorldX() + getSpeed() >= nearest16X()) {
+            if (getWorldX() % GamePanel.TILE_SIZE >= GamePanel.TILE_SIZE - speed) {
                 position.setMapX(getMapX() + 1);
+                getMapTile(getMapX(), getMapY()).onOverlap(this);
             }
         }
     }
 
-    public int nearest16X() {
+    public int nearest32X() {
+        if (getWorldX() % 32 == 0) return getWorldX();
+
         if (getDirection() == Direction.RIGHT) {
             for (int i = getWorldX(); ; i++) {
                 if (i % GamePanel.TILE_SIZE == 0) {
@@ -168,7 +188,9 @@ public abstract class Entity {
         }
     }
 
-    public int nearest16Y() {
+    public int nearest32Y() {
+        if (getWorldY() % 32 == 0) return getWorldY();
+
         if (getDirection() == Direction.DOWN) {
             for (int i = getWorldY(); ; i++) {
                 if (i % GamePanel.TILE_SIZE == 0) {
@@ -182,5 +204,84 @@ public abstract class Entity {
                 }
             }
         }
+    }
+
+    public void moveUp(boolean toNearest) {
+        setDirection(Direction.UP);
+
+        if (getMapY() != 0 && !getMapTile(getMapX(), getMapY() - 1).getOverlappable()) {
+            if (getWorldY() % 32 != 0) {
+                setWorldY(nearest32Y());
+            }
+            updateMapCoordinates();
+            return;
+        }
+
+        if (toNearest == false) {
+            setWorldY(getWorldY() - getSpeed());
+        } else {
+            setWorldY(nearest32Y());
+        }
+
+        updateMapCoordinates();
+    }
+
+    public void moveDown(boolean toNearest) {
+        setDirection(Direction.DOWN);
+
+        if (getMapY() != GamePanel.HEIGHT_NUM - 1 && !getMapTile(getMapX(), getMapY() + 1).getOverlappable()) {
+            if (getWorldY() % 32 != 0) {
+                setWorldY(nearest32Y());
+            }
+            updateMapCoordinates();
+            return;
+        }
+
+        if (toNearest == false) {
+            setWorldY(getWorldY() + getSpeed());
+        } else {
+            setWorldY(nearest32Y());
+        }
+
+        updateMapCoordinates();
+    }
+
+    public void moveLeft(boolean toNearest) {
+        setDirection(Direction.LEFT);
+
+        if (getMapX() != 0 && !getMapTile(getMapX() - 1, getMapY()).getOverlappable()) {
+            if (getWorldX() % 32 != 0) {
+                setWorldX(nearest32X());
+            }
+            updateMapCoordinates();
+            return;
+        }
+
+        if (toNearest == false) {
+            setWorldX(getWorldX() - getSpeed());
+        } else {
+            setWorldX(nearest32X());
+        }
+
+        updateMapCoordinates();
+    }
+
+    public void moveRight(boolean toNearest) {
+        setDirection(Direction.RIGHT);
+        if (getMapX() != GamePanel.WIDTH_NUM - 1 && !getMapTile(getMapX() + 1, getMapY()).getOverlappable()) {
+            if (getWorldX() % 32 != 0) {
+                setWorldX(nearest32X());
+            }
+            updateMapCoordinates();
+            return;
+        }
+
+        if (toNearest == false) {
+            setWorldX(getWorldX() + getSpeed());
+        } else {
+            setWorldX(nearest32X());
+        }
+
+        updateMapCoordinates();
     }
 }

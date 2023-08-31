@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import pacman.entities.Entity;
+
 public class GrassTile extends Tile {
 
     public GrassTile(boolean overlappable, int mapX, int mapY) {
@@ -19,5 +21,9 @@ public class GrassTile extends Tile {
             e.printStackTrace();
         }
     }
-    
+
+    @Override
+    public void onOverlap(Entity entity) {
+        entity.setSpeed(entity.getDefaultSpeed());
+    }
 }

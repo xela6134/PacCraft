@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 
 import pacman.entities.Player;
 import pacman.entities.Entity.Direction;
-import pacman.tiles.TileManager;
 
 /**
  * Works as a game screen
@@ -17,9 +16,9 @@ import pacman.tiles.TileManager;
 public class GamePanel extends JPanel implements Runnable {
     
     // Screen Settings
-    public static final int ORIGINAL_TILE_SIZE = 16;
+    public static final int PIXEL_NUM = 16;
     public static final int SCALE = 2;
-    public static final int TILE_SIZE = ORIGINAL_TILE_SIZE * SCALE; // 32 x 32
+    public static final int TILE_SIZE = PIXEL_NUM * SCALE; // 32 x 32
 
     public static final int WIDTH_NUM = 30;
     public static final int HEIGHT_NUM = 18;
@@ -29,12 +28,10 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int FPS = 60;
     public static final int nanosInSecond = 1000000000;
 
-    public static final int DEFAULT_PLAYER_SPEED = 2;
-
     Thread gameThread;
-    TileManager manager = new TileManager(this);
+    GameMap map = new GameMap(this);
     KeyHandler handler = new KeyHandler();
-    Player player = new Player(0, 0, DEFAULT_PLAYER_SPEED, Direction.LEFT);
+    Player player = new Player(0, 0, Player.DEFAULT_PLAYER_SPEED, Direction.LEFT, map);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -59,7 +56,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         while (gameThread != null) {
             update();
-            repaint();
+            repaint(); // this calls paintComponent()
 
             try {
                 double remainingTime = nextDrawTime - System.nanoTime();
@@ -85,7 +82,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        manager.draw(g2);
+        map.draw(g2);
         player.draw(g2);
         g2.dispose();
     }

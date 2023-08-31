@@ -3,6 +3,7 @@ package pacman.tiles;
 import java.awt.image.BufferedImage;
 
 import pacman.components.Position;
+import pacman.entities.Entity;
 
 public abstract class Tile {
     protected BufferedImage tileImage;
@@ -27,4 +28,6 @@ public abstract class Tile {
     }
 
     public abstract void setTileImage();
+
+    public abstract void onOverlap(Entity entity);
 }

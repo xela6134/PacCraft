@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import pacman.entities.Entity;
+
 public class WallTile extends Tile {
 
     public WallTile(boolean overlappable, int mapX, int mapY) {
@@ -18,5 +20,10 @@ public class WallTile extends Tile {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onOverlap(Entity entity) {
+        entity.setSpeed(entity.getDefaultSpeed());
     }
 }

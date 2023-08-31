@@ -1,26 +1,35 @@
-package pacman.tiles;
+package pacman.components;
 
 import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import pacman.tiles.DirtTile;
+import pacman.tiles.GrassTile;
+import pacman.tiles.LavaTile;
+import pacman.tiles.SandTile;
+import pacman.tiles.Tile;
+import pacman.tiles.WallTile;
+import pacman.tiles.WaterTile;
 
-import pacman.components.GamePanel;
-
-public class TileManager {
+public class GameMap {
     GamePanel panel;
     Tile mapTiles[][];
 
-    public TileManager(GamePanel panel) {
+    public GameMap(GamePanel panel) {
         this.panel = panel;
         mapTiles = new Tile[GamePanel.WIDTH_NUM][GamePanel.HEIGHT_NUM];
         loadMap();
     }
 
+    public Tile getTile(int x, int y) {
+        return mapTiles[x][y];
+    }
+
     public void loadMap() {
         try {
-            InputStream mapStream = getClass().getResourceAsStream("/maps/default.txt");
+            InputStream mapStream = getClass().getResourceAsStream("/maps/defaultmap.txt");
             BufferedReader mapReader = new BufferedReader(new InputStreamReader(mapStream));
 
             for (int row = 0; row < GamePanel.HEIGHT_NUM; row++) {

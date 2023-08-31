@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import pacman.entities.Entity;
+
 public class WaterTile extends Tile {
 
     public WaterTile(boolean overlappable, int mapX, int mapY) {
@@ -18,6 +20,11 @@ public class WaterTile extends Tile {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onOverlap(Entity entity) {
+        entity.setSpeed(entity.getDefaultSpeed() - 1);
     }
     
 }
