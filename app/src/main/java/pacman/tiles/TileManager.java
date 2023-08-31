@@ -31,22 +31,22 @@ public class TileManager {
                     int num = Integer.parseInt(numbers[col]);   
                     switch (num) {
                         case 0:
-                            mapTiles[col][row] = new DirtTile(true);
+                            mapTiles[col][row] = new DirtTile(true, col, row);
                             break;
                         case 1:
-                            mapTiles[col][row] = new GrassTile(true);
+                            mapTiles[col][row] = new GrassTile(true, col, row);
                             break;
                         case 2:
-                            mapTiles[col][row] = new SandTile(true);
+                            mapTiles[col][row] = new SandTile(true, col, row);
                             break;
                         case 3:
-                            mapTiles[col][row] = new WaterTile(true);
+                            mapTiles[col][row] = new WaterTile(true, col, row);
                             break;
                         case 4:
-                            mapTiles[col][row] = new LavaTile(true);
+                            mapTiles[col][row] = new LavaTile(true, col, row);
                             break;
                         case 5:
-                            mapTiles[col][row] = new WallTile(false);
+                            mapTiles[col][row] = new WallTile(false, col, row);
                             break;
                     }
                 }

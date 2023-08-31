@@ -1,17 +1,20 @@
 package pacman.entities;
 
 import pacman.components.GamePanel;
+import pacman.components.Position;
 
 public abstract class Entity {
     private int worldX, worldY;
     private int speed;
     private int spriteCounter = 0;
     private int spriteNum = 1;
+    private Position position;
 
-    public Entity(int worldX, int worldY, int speed) {
-        this.worldX = worldX;
-        this.worldY = worldY;
+    public Entity(int x, int y, int speed) {
+        this.worldX = x * 32;
+        this.worldY = y * 32;
         this.speed = speed;
+        this.position = new Position(x, y);
     }
 
     public int getWorldX() {
@@ -32,6 +35,10 @@ public abstract class Entity {
 
     public int getSpriteNum() {
         return spriteNum;
+    }
+
+    public Position getPosition() {
+        return position;
     }
 
     public void setWorldX(int x) {

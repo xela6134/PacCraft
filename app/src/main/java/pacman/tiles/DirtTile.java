@@ -6,8 +6,8 @@ import javax.imageio.ImageIO;
 
 public class DirtTile extends Tile {
 
-    public DirtTile(boolean overlappable) {
-        super(overlappable);
+    public DirtTile(boolean overlappable, int mapX, int mapY) {
+        super(overlappable, mapX, mapY);
         setTileImage();
     }
 

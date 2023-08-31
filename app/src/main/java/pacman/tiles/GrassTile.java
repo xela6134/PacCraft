@@ -6,8 +6,8 @@ import javax.imageio.ImageIO;
 
 public class GrassTile extends Tile {
 
-    public GrassTile(boolean overlappable) {
-        super(overlappable);
+    public GrassTile(boolean overlappable, int mapX, int mapY) {
+        super(overlappable, mapX, mapY);
         setTileImage();
     }
 

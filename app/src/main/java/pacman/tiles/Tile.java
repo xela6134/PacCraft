@@ -2,12 +2,16 @@ package pacman.tiles;
 
 import java.awt.image.BufferedImage;
 
+import pacman.components.Position;
+
 public abstract class Tile {
     protected BufferedImage tileImage;
     private boolean overlappable;
+    private Position position;
 
-    public Tile(boolean overlappable) {
+    public Tile(boolean overlappable, int mapX, int mapY) {
         this.overlappable = overlappable;
+        position = new Position(mapX, mapY);
     }
 
     public BufferedImage getTileImage() {
@@ -16,6 +20,10 @@ public abstract class Tile {
 
     public boolean getOverlappable() {
         return overlappable;
+    }
+
+    public Position getPosition() {
+        return position;
     }
 
     public abstract void setTileImage();

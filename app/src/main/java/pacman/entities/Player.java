@@ -69,6 +69,8 @@ public class Player extends Entity {
             }
         }
 
+
+
         updateSprites();
     }
 
@@ -80,6 +82,8 @@ public class Player extends Entity {
      * playerIsHorizontallyBetween() returns true
      * If a player is between A and C
      * playerIsVerticallyBetween() returns true
+     * If a player is in the middle of a tile
+     * playerIsOnTile() returns true
      */
 
     private boolean playerIsHorizontallyBetween() {

@@ -6,8 +6,8 @@ import javax.imageio.ImageIO;
 
 public class WallTile extends Tile {
 
-    public WallTile(boolean overlappable) {
-        super(overlappable);
+    public WallTile(boolean overlappable, int mapX, int mapY) {
+        super(overlappable, mapX, mapY);
         setTileImage();
     }
 

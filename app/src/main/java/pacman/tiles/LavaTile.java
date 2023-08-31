@@ -6,8 +6,8 @@ import javax.imageio.ImageIO;
 
 public class LavaTile extends Tile {
 
-    public LavaTile(boolean overlappable) {
-        super(overlappable);
+    public LavaTile(boolean overlappable, int mapX, int mapY) {
+        super(overlappable, mapX, mapY);
         setTileImage();
     }
 

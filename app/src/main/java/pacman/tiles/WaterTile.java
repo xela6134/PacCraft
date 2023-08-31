@@ -6,8 +6,8 @@ import javax.imageio.ImageIO;
 
 public class WaterTile extends Tile {
 
-    public WaterTile(boolean overlappable) {
-        super(overlappable);
+    public WaterTile(boolean overlappable, int mapX, int mapY) {
+        super(overlappable, mapX, mapY);
         setTileImage();
     }
 

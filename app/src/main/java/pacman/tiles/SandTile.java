@@ -6,8 +6,8 @@ import javax.imageio.ImageIO;
 
 public class SandTile extends Tile {
 
-    public SandTile(boolean overlappable) {
-        super(overlappable);
+    public SandTile(boolean overlappable, int mapX, int mapY) {
+        super(overlappable, mapX, mapY);
         setTileImage();
     }
 
