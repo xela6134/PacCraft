@@ -1,0 +1,6 @@
+Dirt - 0
+Grass - 1
+Sand - 2
+Water - 3
+Lava - 4
+Wall - 5

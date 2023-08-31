@@ -5,6 +5,14 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
     private boolean upPressed, downPressed, leftPressed, rightPressed = false;
+    private LastPressed pressed;
+    
+    public enum LastPressed {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
+    }
 
     @Override
     public void keyPressed(KeyEvent arg) {
@@ -12,18 +20,22 @@ public class KeyHandler implements KeyListener {
 
         if (code == KeyEvent.VK_W) {
             upPressed = true;
+            pressed = LastPressed.UP;
         }
 
         if (code == KeyEvent.VK_A) {
             leftPressed = true;
+            pressed = LastPressed.LEFT;
         }
 
         if (code == KeyEvent.VK_S) {
             downPressed = true;
+            pressed = LastPressed.DOWN;
         }
 
         if (code == KeyEvent.VK_D) {
             rightPressed = true;
+            pressed = LastPressed.RIGHT;
         }
     }
 
@@ -64,20 +76,12 @@ public class KeyHandler implements KeyListener {
         return rightPressed;
     }
 
-    public void setUpPressed(boolean upPressed) {
-        this.upPressed = upPressed;
+    public boolean getSomethingPressed() {
+        return upPressed || downPressed || leftPressed || rightPressed;
     }
 
-    public void setDownPressed(boolean downPressed) {
-        this.downPressed = downPressed;
-    }
-
-    public void setLeftPressed(boolean leftPressed) {
-        this.leftPressed = leftPressed;
-    }
-
-    public void setRightPressed(boolean rightPressed) {
-        this.rightPressed = rightPressed;
+    public LastPressed getLastPressed() {
+        return pressed;
     }
 
     @Override
