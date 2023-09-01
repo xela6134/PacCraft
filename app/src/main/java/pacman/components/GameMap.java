@@ -5,6 +5,11 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import pacman.entities.Entity.Direction;
+import pacman.entities.mobs.BlueGhost;
+import pacman.entities.mobs.Devil;
+import pacman.entities.mobs.Mob;
+import pacman.entities.mobs.RedGhost;
 import pacman.tiles.DirtTile;
 import pacman.tiles.GrassTile;
 import pacman.tiles.LavaTile;
@@ -16,11 +21,14 @@ import pacman.tiles.WaterTile;
 public class GameMap {
     GamePanel panel;
     Tile mapTiles[][];
+    Mob mapMobs[][];
 
     public GameMap(GamePanel panel) {
         this.panel = panel;
         mapTiles = new Tile[GamePanel.WIDTH_NUM][GamePanel.HEIGHT_NUM];
+        mapMobs = new Mob[GamePanel.WIDTH_NUM][GamePanel.HEIGHT_NUM];
         loadMap();
+        loadMobs();
     }
 
     public Tile getTile(int x, int y) {
@@ -61,6 +69,44 @@ public class GameMap {
                 }
             }
             mapReader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadMobs() {
+        try {
+            InputStream mobStream = getClass().getResourceAsStream("/maps/defaultmob.txt");
+            BufferedReader mobReader = new BufferedReader(new InputStreamReader(mobStream));
+
+            for (int row = 0; row < GamePanel.HEIGHT_NUM; row++) {
+                String line = mobReader.readLine();
+                String numbers[] = line.split(" ");
+
+                for (int col = 0; col < GamePanel.WIDTH_NUM; col++) {
+                    int num = Integer.parseInt(numbers[col]);   
+                    switch (num) {
+                        case 0:
+                            break;
+                        case 1:
+                            BlueGhost blueGhost = new BlueGhost(col, row, BlueGhost.BLUEGHOST_SPEED, Direction.LEFT, this);
+                            mapMobs[col][row] = blueGhost;
+                            panel.addMob(blueGhost);
+                            break;
+                        case 2:
+                            RedGhost redGhost = new RedGhost(col, row, RedGhost.REDGHOST_SPEED, Direction.LEFT, this);
+                            mapMobs[col][row] = redGhost;
+                            panel.addMob(redGhost);
+                            break;
+                        case 3:
+                            Devil devil = new Devil(col, row, Devil.DEVIL_SPEED, Direction.LEFT, this);
+                            mapMobs[col][row] = devil;
+                            panel.addMob(devil);
+                            break;
+                    }
+                }
+            }
+            mobReader.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

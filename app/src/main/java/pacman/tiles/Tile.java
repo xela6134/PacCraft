@@ -3,9 +3,9 @@ package pacman.tiles;
 import java.awt.image.BufferedImage;
 
 import pacman.components.Position;
-import pacman.entities.Entity;
+import pacman.interfaces.Overlappable;
 
-public abstract class Tile {
+public abstract class Tile implements Overlappable {
     protected BufferedImage tileImage;
     private boolean overlappable;
     private Position position;
@@ -28,6 +28,4 @@ public abstract class Tile {
     }
 
     public abstract void setTileImage();
-
-    public abstract void onOverlap(Entity entity);
 }

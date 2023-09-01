@@ -24,7 +24,7 @@ public class SandTile extends Tile {
 
     @Override
     public void onOverlap(Entity entity) {
-        entity.setSpeed(entity.getDefaultSpeed());
+        entity.setSpeed(entity.getDefaultSpeed() + 1);
     }
     
 }

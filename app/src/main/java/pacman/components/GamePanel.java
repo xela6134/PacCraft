@@ -4,17 +4,20 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
 import pacman.entities.Player;
 import pacman.entities.Entity.Direction;
+import pacman.entities.mobs.Mob;
 
 /**
  * Works as a game screen
  */
 public class GamePanel extends JPanel implements Runnable {
-    
+
     // Screen Settings
     public static final int PIXEL_NUM = 16;
     public static final int SCALE = 2;
@@ -27,6 +30,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     public static final int FPS = 60;
     public static final int nanosInSecond = 1000000000;
+
+    List<Mob> mobList = new ArrayList<Mob>();
 
     Thread gameThread;
     GameMap map = new GameMap(this);
@@ -76,6 +81,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
+        mobList.stream().forEach(x -> x.update());
         player.update(handler);
     }
 
@@ -83,7 +89,12 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         map.draw(g2);
+        mobList.stream().forEach(x -> x.draw(g2));
         player.draw(g2);
         g2.dispose();
+    }
+
+    public void addMob(Mob mob) {
+        mobList.add(mob);
     }
 }

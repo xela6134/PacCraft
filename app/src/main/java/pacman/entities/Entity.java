@@ -150,21 +150,25 @@ public abstract class Entity {
         if (direction == Direction.UP) {
             if (getWorldY() % GamePanel.TILE_SIZE <= speed) {
                 position.setMapY(getMapY() - 1);
+                if (getMapY() <= -1) return;
                 getMapTile(getMapX(), getMapY()).onOverlap(this);
             }
         } else if (direction == Direction.DOWN) {
             if (getWorldY() % GamePanel.TILE_SIZE >= GamePanel.TILE_SIZE - speed) {
                 position.setMapY(getMapY() + 1);
+                if (getMapY() >= GamePanel.HEIGHT_NUM) return;
                 getMapTile(getMapX(), getMapY()).onOverlap(this);
             }
         } else if (direction == Direction.LEFT) {
             if (getWorldX() % GamePanel.TILE_SIZE <= speed) {
                 position.setMapX(getMapX() - 1);
+                if (getMapX() <= -1) return;
                 getMapTile(getMapX(), getMapY()).onOverlap(this);
             }
         } else if (direction == Direction.RIGHT) {
             if (getWorldX() % GamePanel.TILE_SIZE >= GamePanel.TILE_SIZE - speed) {
                 position.setMapX(getMapX() + 1);
+                if (getMapX() >= GamePanel.WIDTH_NUM) return;
                 getMapTile(getMapX(), getMapY()).onOverlap(this);
             }
         }

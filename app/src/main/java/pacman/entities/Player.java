@@ -21,7 +21,6 @@ public class Player extends Entity {
     }
     
     public void update(KeyHandler handler) {
-        System.out.println(getSpeed());
         if (handler.getUpPressed() && !playerIsHorizontallyBetween()) {
             moveUp(false);
         } else if (handler.getDownPressed() && !playerIsHorizontallyBetween()) {
