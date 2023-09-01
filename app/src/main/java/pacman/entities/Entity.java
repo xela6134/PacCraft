@@ -77,23 +77,11 @@ public abstract class Entity {
     }
 
     public void setWorldX(int x) {
-        if (x < 0) {
-            this.worldX = 0;
-        } else if (x > GamePanel.SCREEN_WIDTH - GamePanel.TILE_SIZE) {
-            this.worldX = GamePanel.SCREEN_WIDTH - GamePanel.TILE_SIZE;
-        } else {
-            this.worldX = x;
-        }
+        this.worldX = x;
     }
 
     public void setWorldY(int y) {
-        if (y < 0) {
-            this.worldY = 0;
-        } else if (y > GamePanel.SCREEN_HEIGHT - GamePanel.TILE_SIZE) {
-            this.worldY = GamePanel.SCREEN_HEIGHT - GamePanel.TILE_SIZE;
-        } else {
-            this.worldY = y;
-        }
+        this.worldY = y;
     }
 
     public void setMapX(int mapX) {
@@ -126,7 +114,7 @@ public abstract class Entity {
      */
     public void updateSprites() {
         setSpriteCounter(getSpriteCounter() + 1);
-        if (getSpriteCounter() > 10) {
+        if (getSpriteCounter() > 5) {
             if (getSpriteNum() == 1) {
                 setSpriteNum(2);
             } else if (getSpriteNum() == 2) {
@@ -213,7 +201,8 @@ public abstract class Entity {
     public void moveUp(boolean toNearest) {
         setDirection(Direction.UP);
 
-        if (getMapY() != 0 && !getMapTile(getMapX(), getMapY() - 1).getOverlappable()) {
+        // Wall collision
+        if (checkWallCollision(getDirection())) {
             if (getWorldY() % 32 != 0) {
                 setWorldY(nearest32Y());
             }
@@ -233,7 +222,8 @@ public abstract class Entity {
     public void moveDown(boolean toNearest) {
         setDirection(Direction.DOWN);
 
-        if (getMapY() != GamePanel.HEIGHT_NUM - 1 && !getMapTile(getMapX(), getMapY() + 1).getOverlappable()) {
+        // Wall collision
+        if (checkWallCollision(getDirection())) {
             if (getWorldY() % 32 != 0) {
                 setWorldY(nearest32Y());
             }
@@ -253,7 +243,8 @@ public abstract class Entity {
     public void moveLeft(boolean toNearest) {
         setDirection(Direction.LEFT);
 
-        if (getMapX() != 0 && !getMapTile(getMapX() - 1, getMapY()).getOverlappable()) {
+        // Wall collision
+        if (checkWallCollision(getDirection())) {
             if (getWorldX() % 32 != 0) {
                 setWorldX(nearest32X());
             }
@@ -272,7 +263,9 @@ public abstract class Entity {
 
     public void moveRight(boolean toNearest) {
         setDirection(Direction.RIGHT);
-        if (getMapX() != GamePanel.WIDTH_NUM - 1 && !getMapTile(getMapX() + 1, getMapY()).getOverlappable()) {
+
+        // Wall collision
+        if (checkWallCollision(getDirection())) {
             if (getWorldX() % 32 != 0) {
                 setWorldX(nearest32X());
             }
@@ -287,5 +280,28 @@ public abstract class Entity {
         }
 
         updateMapCoordinates();
+    }
+
+    /**
+     * Checks if a certain entity is about to collide with a wall with its current direction. 
+     * Returns true when entity is at the end of the map, or there is a wall in front 
+     * in front of the player.
+     */
+    public boolean checkWallCollision(Direction direction) {
+        switch (direction) {
+            case UP:
+                return (getMapY() <= 0) 
+                || (getMapY() != 0 && !getMapTile(getMapX(), getMapY() - 1).getOverlappable());
+            case DOWN:
+                return (getMapY() >= GamePanel.HEIGHT_NUM - 1) 
+                || (getMapY() != GamePanel.HEIGHT_NUM - 1 && !getMapTile(getMapX(), getMapY() + 1).getOverlappable());
+            case LEFT:
+                return (getMapX() <= 0) 
+                || (getMapX() != 0 && !getMapTile(getMapX() - 1, getMapY()).getOverlappable());
+            case RIGHT:
+                return (getMapX() >= GamePanel.WIDTH_NUM - 1) 
+                || (getMapX() != GamePanel.WIDTH_NUM - 1 && !getMapTile(getMapX() + 1, getMapY()).getOverlappable());
+        }
+        return false;
     }
 }

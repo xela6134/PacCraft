@@ -8,5 +8,4 @@ public class DevilMovement implements Movement {
     public void update(Mob mob) {
         
     }
-    
 }

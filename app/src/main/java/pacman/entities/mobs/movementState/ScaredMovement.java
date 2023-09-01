@@ -8,5 +8,4 @@ public class ScaredMovement implements Movement {
     public void update(Mob mob) {
         
     }
-    
 }
