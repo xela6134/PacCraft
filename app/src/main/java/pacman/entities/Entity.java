@@ -76,6 +76,14 @@ public abstract class Entity {
         return map.getTile(x, y);
     }
 
+    public Player getPlayer() {
+        return map.getPlayer();
+    }
+
+    public GameMap getGameMap() {
+        return map;
+    }
+
     public void setWorldX(int x) {
         this.worldX = x;
     }

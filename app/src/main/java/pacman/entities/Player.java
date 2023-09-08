@@ -12,12 +12,14 @@ import pacman.components.KeyHandler;
 
 public class Player extends Entity {
     public static final int DEFAULT_PLAYER_SPEED = 3;
+    public static final int PLAYER_DEFAULT_HEALTH = 20;
 
     private BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 
     public Player(int x, int y, int speed, Direction direction, GameMap map) {
         super(x, y, speed, direction, map);
         getPlayerImage();
+        map.addPlayer(this);
     }
     
     public void update(KeyHandler handler) {

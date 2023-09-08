@@ -1,5 +1,8 @@
 package pacman.components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Unlike the position set in Entity, (worldX, worldY)
  * which is used for the X and Y coordinates for pixel drawing
@@ -28,5 +31,24 @@ public class Position {
 
     public void setMapY(int mapY) {
         this.mapY = mapY;
+    }
+
+    public List<Position> getCardinallyAdjacentPositions() {
+        List<Position> adjacentPositions = new ArrayList<>();
+
+        if (mapX != 0) {
+            adjacentPositions.add(new Position(mapX - 1, mapY));
+        } if (mapY != 0) {
+            adjacentPositions.add(new Position(mapX, mapY - 1));
+        } if (mapX != GamePanel.WIDTH_NUM - 1) {
+            adjacentPositions.add(new Position(mapX + 1, mapY));
+        } if (mapY != GamePanel.HEIGHT_NUM - 1) {
+            adjacentPositions.add(new Position(mapX, mapY + 1));
+        }
+        return adjacentPositions;
+    }
+
+    public boolean equals(Position position) {
+        return mapX == position.getMapX() && mapY == position.getMapY();
     }
 }

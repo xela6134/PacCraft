@@ -28,7 +28,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int SCREEN_WIDTH = TILE_SIZE * WIDTH_NUM;
     public static final int SCREEN_HEIGHT = TILE_SIZE * HEIGHT_NUM;
 
-    public static final int FPS = 40;
+    public static final int FPS = 30;
     public static final int nanosInSecond = 1000000000;
 
     List<Mob> mobList = new ArrayList<Mob>();
