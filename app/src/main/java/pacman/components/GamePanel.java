@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import pacman.entities.Player;
 import pacman.entities.Entity.Direction;
 import pacman.entities.mobs.Mob;
+import pacman.objects.Object;
 
 /**
  * Works as a game screen
@@ -32,6 +33,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int nanosInSecond = 1000000000;
 
     List<Mob> mobList = new ArrayList<Mob>();
+    List<Object> objectList = new ArrayList<Object>();
 
     Thread gameThread;
     GameMap map = new GameMap(this);
@@ -83,12 +85,15 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
         mobList.stream().forEach(x -> x.update());
         player.update(handler);
+        mobList.stream().forEach(x -> x.onInteract(player));
+        objectList.stream().forEach(x -> x.onInteract(player));
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         map.draw(g2);
+        objectList.stream().forEach(x -> x.draw(g2));
         mobList.stream().forEach(x -> x.draw(g2));
         player.draw(g2);
         g2.dispose();
@@ -96,5 +101,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void addMob(Mob mob) {
         mobList.add(mob);
+    }
+
+    public void addObject(Object object) {
+        objectList.add(object);
     }
 }

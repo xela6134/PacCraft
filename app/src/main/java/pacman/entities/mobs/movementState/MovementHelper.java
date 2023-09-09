@@ -147,7 +147,6 @@ public class MovementHelper {
         if (node.getParent() == null) return node.getPosition();
         
         while (!curr.getParent().getPosition().equals(src)) {
-            System.out.println(curr.getPosition().getMapX() + " " + curr.getPosition().getMapY());
             curr = curr.getParent();
             if (curr.getParent() == null) return curr.getPosition();
         }

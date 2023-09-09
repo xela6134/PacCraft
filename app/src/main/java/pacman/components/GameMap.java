@@ -11,6 +11,10 @@ import pacman.entities.mobs.BlueGhost;
 import pacman.entities.mobs.Devil;
 import pacman.entities.mobs.Mob;
 import pacman.entities.mobs.RedGhost;
+import pacman.objects.BlueOrb;
+import pacman.objects.Gold;
+import pacman.objects.GreenOrb;
+import pacman.objects.Object;
 import pacman.tiles.DirtTile;
 import pacman.tiles.GrassTile;
 import pacman.tiles.LavaTile;
@@ -23,14 +27,17 @@ public class GameMap {
     GamePanel panel;
     Tile mapTiles[][];
     Mob mapMobs[][];
+    Object mapObjects[][];
     Player player;
 
     public GameMap(GamePanel panel) {
         this.panel = panel;
         mapTiles = new Tile[GamePanel.WIDTH_NUM][GamePanel.HEIGHT_NUM];
         mapMobs = new Mob[GamePanel.WIDTH_NUM][GamePanel.HEIGHT_NUM];
+        mapObjects = new Object[GamePanel.WIDTH_NUM][GamePanel.HEIGHT_NUM];
         loadMap();
         loadMobs();
+        loadObjects();
     }
 
     public void addPlayer(Player player) {
@@ -124,11 +131,11 @@ public class GameMap {
 
     public void loadObjects() {
         try {
-            InputStream mobStream = getClass().getResourceAsStream("/maps/defaultmob.txt");
-            BufferedReader mobReader = new BufferedReader(new InputStreamReader(mobStream));
+            InputStream objectStream = getClass().getResourceAsStream("/maps/defaultobject.txt");
+            BufferedReader objectReader = new BufferedReader(new InputStreamReader(objectStream));
 
             for (int row = 0; row < GamePanel.HEIGHT_NUM; row++) {
-                String line = mobReader.readLine();
+                String line = objectReader.readLine();
                 String numbers[] = line.split(" ");
 
                 for (int col = 0; col < GamePanel.WIDTH_NUM; col++) {
@@ -137,24 +144,24 @@ public class GameMap {
                         case 0:
                             break;
                         case 1:
-                            BlueGhost blueGhost = new BlueGhost(col, row, BlueGhost.BLUEGHOST_SPEED, Direction.LEFT, this);
-                            mapMobs[col][row] = blueGhost;
-                            panel.addMob(blueGhost);
+                            Gold gold = new Gold(col, row);
+                            mapObjects[col][row] = gold;
+                            panel.addObject(gold);
                             break;
                         case 2:
-                            RedGhost redGhost = new RedGhost(col, row, RedGhost.REDGHOST_SPEED, Direction.LEFT, this);
-                            mapMobs[col][row] = redGhost;
-                            panel.addMob(redGhost);
+                            BlueOrb blueOrb = new BlueOrb(col, row);
+                            mapObjects[col][row] = blueOrb;
+                            panel.addObject(blueOrb);
                             break;
                         case 3:
-                            Devil devil = new Devil(col, row, Devil.DEVIL_SPEED, Direction.LEFT, this);
-                            mapMobs[col][row] = devil;
-                            panel.addMob(devil);
+                            GreenOrb greenOrb = new GreenOrb(col, row);
+                            mapObjects[col][row] = greenOrb;
+                            panel.addObject(greenOrb);
                             break;
                     }
                 }
             }
-            mobReader.close();
+            objectReader.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

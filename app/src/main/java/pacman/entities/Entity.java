@@ -14,6 +14,8 @@ public abstract class Entity {
     private Position position;
     private Direction direction;
     private GameMap map;
+    private int health;
+    private int damage;
 
     public enum Direction {
         UP,
@@ -22,7 +24,7 @@ public abstract class Entity {
         RIGHT
     }
 
-    public Entity(int x, int y, int speed, Direction direction, GameMap map) {
+    public Entity(int x, int y, int speed, Direction direction, GameMap map, int health, int damage) {
         this.worldX = x * 32;
         this.worldY = y * 32;
         this.speed = speed;
@@ -30,6 +32,8 @@ public abstract class Entity {
         this.position = new Position(x, y);
         this.direction = direction;
         this.map = map;
+        this.health = health;
+        this.damage = damage;
     }
 
     public int getWorldX() {
@@ -84,6 +88,14 @@ public abstract class Entity {
         return map;
     }
 
+    public int getHealth() {
+        return health;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
     public void setWorldX(int x) {
         this.worldX = x;
     }
@@ -114,6 +126,14 @@ public abstract class Entity {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 
     /**

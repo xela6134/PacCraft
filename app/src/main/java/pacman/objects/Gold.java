@@ -4,25 +4,26 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import pacman.entities.Entity;
 import pacman.entities.Player;
 
 public class Gold extends Object {
 
-    public Gold(boolean overlappable, int mapX, int mapY) {
-        super(overlappable, mapX, mapY);
+    public Gold(int mapX, int mapY) {
+        super(mapX, mapY);
         setObjectImage();
     }
 
     @Override
-    public void onOverlap(Entity entity) {
-        if (!(entity instanceof Player)) return;
+    public void onInteract(Player player) {
+        if (!player.getPosition().equals(getPosition())) return;
+        player.addGold();
+        setExists(false);
     }
 
     @Override
     public void setObjectImage() {
         try {
-            tileImage = ImageIO.read(getClass().getResourceAsStream("/objects/gold.png"));
+            objectImage = ImageIO.read(getClass().getResourceAsStream("/objects/gold.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

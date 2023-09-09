@@ -12,14 +12,34 @@ import pacman.components.KeyHandler;
 
 public class Player extends Entity {
     public static final int DEFAULT_PLAYER_SPEED = 3;
-    public static final int PLAYER_DEFAULT_HEALTH = 20;
+    public static final int PLAYER_HEALTH = 20;
+    public static final int PLYAER_DAMAGE = 5;
+
+    private boolean invulnerable = false;
+    private int goldNum = 0;
 
     private BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 
     public Player(int x, int y, int speed, Direction direction, GameMap map) {
-        super(x, y, speed, direction, map);
+        super(x, y, speed, direction, map, PLAYER_HEALTH, PLYAER_DAMAGE);
         getPlayerImage();
         map.addPlayer(this);
+    }
+
+    public void addGold() {
+        goldNum++;
+    }
+
+    public int getGold() {
+        return goldNum;
+    }
+
+    public boolean getInvulnerable() {
+        return invulnerable;
+    }
+
+    public void setInvulnerable(boolean invulnerable) {
+        this.invulnerable = invulnerable;
     }
     
     public void update(KeyHandler handler) {
