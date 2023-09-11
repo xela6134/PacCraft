@@ -9,7 +9,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class UI {
-    private Font arial_40 = new Font("Arial", Font.PLAIN, 20);
+    public Font arial_40 = new Font("Arial", Font.PLAIN, 20);
 
     private BufferedImage health;
     private BufferedImage gold;

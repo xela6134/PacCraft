@@ -90,11 +90,12 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
-        gameThread = null;
         if (result == 1) {
-            throw new UnsupportedOperationException("Game Lost");
+            gameLost = true;
+            repaint();
         } else if (result == 2) {
-            throw new UnsupportedOperationException("Game Won");
+            gameWon = true;
+            repaint();
         } else {
             throw new UnsupportedOperationException("Weird Error");
         }
@@ -113,11 +114,28 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+
         map.draw(g2);
         objectList.stream().forEach(x -> x.draw(g2));
         mobList.stream().forEach(x -> x.draw(g2));
-        player.draw(g2);
-        ui.draw(g2);
+        
+        if (!gameWon && !gameLost) {
+            player.draw(g2);
+            ui.draw(g2);
+        } else if (gameWon) {
+            g2.setFont(ui.arial_40);
+            g2.setColor(Color.BLACK);
+            g2.fillRect(400, 268, 160, 40);
+            g2.setColor(Color.WHITE);
+            g2.drawString("Game Won :D", 420, 292);
+        } else if (gameLost) {
+            g2.setFont(ui.arial_40);
+            g2.setColor(Color.BLACK);
+            g2.fillRect(400, 268, 160, 40);
+            g2.setColor(Color.WHITE);
+            g2.drawString("Game Lost :(", 420, 292);
+        }
+
         g2.dispose();
     }
 
