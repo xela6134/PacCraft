@@ -10,7 +10,7 @@ import pacman.entities.mobs.movementState.RedGhostMovement;
 
 public class RedGhost extends Mob {
     public static final int REDGHOST_SPEED = 3;
-    public static final int REDGHOST_HEALTH = 10;
+    public static final int REDGHOST_HEALTH = 5;
     public static final int REDGHOST_DAMAGE = 3;
 
     public RedGhost(int x, int y, int speed, Direction direction, GameMap map) {

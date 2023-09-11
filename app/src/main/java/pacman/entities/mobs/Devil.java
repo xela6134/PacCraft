@@ -10,7 +10,7 @@ import pacman.entities.mobs.movementState.DevilMovement;
 
 public class Devil extends Mob {
     public static final int DEVIL_SPEED = 4;
-    public static final int DEVIL_HEALTH = 20;
+    public static final int DEVIL_HEALTH = 5;
     public static final int DEVIL_DAMAGE = 15;
 
     public Devil(int x, int y, int speed, Direction direction, GameMap map) {

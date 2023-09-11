@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import pacman.entities.Entity;
+import pacman.entities.Player;
 
 public class LavaTile extends Tile {
 
@@ -24,7 +25,16 @@ public class LavaTile extends Tile {
 
     @Override
     public void onOverlap(Entity entity) {
-        entity.setSpeed(entity.getDefaultSpeed());
+        if (entity instanceof Player) {
+            Player player = (Player) entity;
+            if (player.getBlueOrbInEffect()) {
+                player.setSpeed(player.getDefaultSpeed());
+            } else {
+                player.setAlive(false);
+            }
+        } else {
+            entity.setSpeed(entity.getDefaultSpeed());
+        }
     }
     
 }

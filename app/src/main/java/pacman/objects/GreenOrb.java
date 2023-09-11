@@ -8,7 +8,7 @@ import pacman.components.GamePanel;
 import pacman.entities.Player;
 
 /**
- * Makes player invulnerable for 5 seconds
+ * Makes player invulnerable for 7 seconds
  */
 public class GreenOrb extends Object {
     private int ticks = 0;
@@ -30,7 +30,7 @@ public class GreenOrb extends Object {
     @Override
     public void setObjectImage() {
         try {
-            objectImage = ImageIO.read(getClass().getResourceAsStream("/objects/blueorb.png"));
+            objectImage = ImageIO.read(getClass().getResourceAsStream("/objects/greenorb.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,13 +38,17 @@ public class GreenOrb extends Object {
     
     private void applyBuff(Player player) {
         if (ticks == 0) {
-            player.setInvulnerable(true);
+            System.out.println("GreenOrb Activated!");
+            player.setGreenOrbInEffect(true);
             activated = true;
             ticks++;
-        } else if (ticks < GamePanel.FPS * 5) {
+        } else if (ticks < GamePanel.FPS * 7) {
+            System.out.println("GreenOrb Tick: " + ticks);
+            player.setGreenOrbInEffect(true);
             ticks++;
-        } else if (ticks == GamePanel.FPS) {
-            player.setInvulnerable(false);
+        } else if (ticks == GamePanel.FPS * 7) {
+            System.out.println("GreenOrb Deactivated!");
+            player.setGreenOrbInEffect(false);
             activated = false;
         } else {
             return;

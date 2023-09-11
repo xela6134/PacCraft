@@ -3,25 +3,28 @@ package pacman.entities;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import pacman.components.GameMap;
 import pacman.components.GamePanel;
 import pacman.components.KeyHandler;
+import pacman.entities.mobs.Mob;
 
 public class Player extends Entity {
     public static final int DEFAULT_PLAYER_SPEED = 3;
     public static final int PLAYER_HEALTH = 20;
-    public static final int PLYAER_DAMAGE = 5;
+    public static final int PLAYER_DAMAGE = 5;
 
-    private boolean invulnerable = false;
+    private boolean greenOrbInEffect = false;
+    private boolean blueOrbInEffect = false;
     private int goldNum = 0;
 
     private BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
 
     public Player(int x, int y, int speed, Direction direction, GameMap map) {
-        super(x, y, speed, direction, map, PLAYER_HEALTH, PLYAER_DAMAGE);
+        super(x, y, speed, direction, map, PLAYER_HEALTH, PLAYER_DAMAGE);
         getPlayerImage();
         map.addPlayer(this);
     }
@@ -34,12 +37,20 @@ public class Player extends Entity {
         return goldNum;
     }
 
-    public boolean getInvulnerable() {
-        return invulnerable;
+    public boolean getGreenOrbInEffect() {
+        return greenOrbInEffect;
     }
 
-    public void setInvulnerable(boolean invulnerable) {
-        this.invulnerable = invulnerable;
+    public boolean getBlueOrbInEffect() {
+        return blueOrbInEffect;
+    }
+
+    public void setGreenOrbInEffect(boolean greenOrbInEffect) {
+        this.greenOrbInEffect = greenOrbInEffect;
+    }
+
+    public void setBlueOrbInEffect(boolean blueOrbInEffect) {
+        this.blueOrbInEffect = blueOrbInEffect;
     }
     
     public void update(KeyHandler handler) {
@@ -146,5 +157,40 @@ public class Player extends Entity {
                 } break;
         }
         g2.drawImage(image, getWorldX(), getWorldY(), GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
+    }
+
+    public void battle(List<Mob> mobList) {
+        for (Mob mob : mobList) {
+            if (mob.getPosition().equals(getPosition())) {
+                battleMob(this, mob);
+            }
+        }
+    }
+
+    private void battleMob(Player player, Mob mob) {
+        if (player.getGreenOrbInEffect()) {
+            mob.setAlive(false);
+            mob.setHealth(0);
+            return;
+        }
+
+        int newPlayerHealth = player.getHealth() - mob.getDamage();
+        int newMobHealth = mob.getHealth() - player.getDamage();
+
+        if (!mob.getAlive()) return;
+        
+        if (newPlayerHealth <= 0) {
+            player.setAlive(false);
+            player.setHealth(0);
+        } else {
+            player.setHealth(newPlayerHealth);
+        }
+
+        if (newMobHealth <= 0) {
+            mob.setAlive(false);
+            mob.setHealth(0);
+        } else {
+            mob.setHealth(newMobHealth);
+        }
     }
 }

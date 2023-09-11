@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import pacman.entities.Entity;
+import pacman.entities.Player;
 
 public class GrassTile extends Tile {
 
@@ -24,6 +25,13 @@ public class GrassTile extends Tile {
 
     @Override
     public void onOverlap(Entity entity) {
-        entity.setSpeed(entity.getDefaultSpeed());
+        if (entity instanceof Player) {
+            Player player = (Player) entity;
+            if (!player.getBlueOrbInEffect()) {
+                entity.setSpeed(entity.getDefaultSpeed());
+            }
+        } else {
+            entity.setSpeed(entity.getDefaultSpeed());
+        }   
     }
 }

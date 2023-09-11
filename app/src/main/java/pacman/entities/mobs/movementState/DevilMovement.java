@@ -10,7 +10,7 @@ public class DevilMovement implements Movement {
 
     @Override
     public void update(Mob mob) {
-        if (ticks < GamePanel.FPS) {
+        if (ticks < 20) {
             ticks++;
             return;
         }

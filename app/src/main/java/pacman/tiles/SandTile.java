@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import pacman.entities.Entity;
+import pacman.entities.Player;
 
 public class SandTile extends Tile {
 
@@ -24,7 +25,14 @@ public class SandTile extends Tile {
 
     @Override
     public void onOverlap(Entity entity) {
-        entity.setSpeed(entity.getDefaultSpeed() + 1);
+        if (entity instanceof Player) {
+            Player player = (Player) entity;
+            if (!player.getBlueOrbInEffect()) {
+                entity.setSpeed(entity.getDefaultSpeed() + 1);
+            }
+        } else {
+            entity.setSpeed(entity.getDefaultSpeed() + 1);
+        }   
     }
     
 }

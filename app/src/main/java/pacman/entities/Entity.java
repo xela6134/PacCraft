@@ -16,6 +16,7 @@ public abstract class Entity {
     private GameMap map;
     private int health;
     private int damage;
+    private boolean alive = true;
 
     public enum Direction {
         UP,
@@ -96,6 +97,10 @@ public abstract class Entity {
         return damage;
     }
 
+    public boolean getAlive() {
+        return alive;
+    }
+
     public void setWorldX(int x) {
         this.worldX = x;
     }
@@ -134,6 +139,10 @@ public abstract class Entity {
 
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     /**

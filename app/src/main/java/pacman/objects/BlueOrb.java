@@ -13,6 +13,7 @@ import pacman.entities.Player;
 public class BlueOrb extends Object {
     private int ticks = 0;
     private boolean activated = false;
+    private int limit = GamePanel.FPS * 7;
 
     public BlueOrb(int mapX, int mapY) {
         super(mapX, mapY);
@@ -30,7 +31,7 @@ public class BlueOrb extends Object {
     @Override
     public void setObjectImage() {
         try {
-            objectImage = ImageIO.read(getClass().getResourceAsStream("/objects/greenorb.png"));
+            objectImage = ImageIO.read(getClass().getResourceAsStream("/objects/blueorb.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,13 +39,16 @@ public class BlueOrb extends Object {
 
     private void applyBuff(Player player) {
         if (ticks == 0) {
-            player.setSpeed(Player.DEFAULT_PLAYER_SPEED * 2);
+            player.setSpeed(Player.DEFAULT_PLAYER_SPEED + 2);
+            player.setBlueOrbInEffect(true);
             activated = true;
             ticks++;
-        } else if (ticks < GamePanel.FPS * 7) {
+        } else if (ticks < limit) {
+            player.setSpeed(Player.DEFAULT_PLAYER_SPEED + 2);
             ticks++;
-        } else if (ticks == GamePanel.FPS) {
+        } else if (ticks == limit) {
             player.setSpeed(Player.DEFAULT_PLAYER_SPEED);
+            player.setBlueOrbInEffect(false);
             activated = false;
         } else {
             return;

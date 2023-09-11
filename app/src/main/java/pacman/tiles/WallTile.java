@@ -24,6 +24,6 @@ public class WallTile extends Tile {
 
     @Override
     public void onOverlap(Entity entity) {
-        entity.setSpeed(entity.getDefaultSpeed());
+        throw new UnsupportedOperationException("Walls cannot be overlapped!");
     }
 }

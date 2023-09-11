@@ -32,13 +32,19 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int FPS = 30;
     public static final int nanosInSecond = 1000000000;
 
-    List<Mob> mobList = new ArrayList<Mob>();
-    List<Object> objectList = new ArrayList<Object>();
+    public static final int GOLD_GOAL = 5;
+
+    private List<Mob> mobList = new ArrayList<Mob>();
+    private List<Object> objectList = new ArrayList<Object>();
 
     Thread gameThread;
     GameMap map = new GameMap(this);
     KeyHandler handler = new KeyHandler();
-    Player player = new Player(0, 1, Player.DEFAULT_PLAYER_SPEED, Direction.LEFT, map);
+    UI ui = new UI(this);
+
+    private Player player = new Player(0, 1, Player.DEFAULT_PLAYER_SPEED, Direction.LEFT, map);
+    private boolean gameWon = false;
+    private boolean gameLost = false;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -61,9 +67,13 @@ public class GamePanel extends JPanel implements Runnable {
         double drawInterval = nanosInSecond / FPS;
         double nextDrawTime = System.nanoTime() + drawInterval;
 
+        int result = 0;
         while (gameThread != null) {
             update();
             repaint(); // this calls paintComponent()
+            result = checkGameStatus();
+            
+            if (result != 0) break;
 
             try {
                 double remainingTime = nextDrawTime - System.nanoTime();
@@ -78,7 +88,15 @@ public class GamePanel extends JPanel implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            
+        }
+
+        gameThread = null;
+        if (result == 1) {
+            throw new UnsupportedOperationException("Game Lost");
+        } else if (result == 2) {
+            throw new UnsupportedOperationException("Game Won");
+        } else {
+            throw new UnsupportedOperationException("Weird Error");
         }
     }
 
@@ -87,6 +105,9 @@ public class GamePanel extends JPanel implements Runnable {
         player.update(handler);
         mobList.stream().forEach(x -> x.onInteract(player));
         objectList.stream().forEach(x -> x.onInteract(player));
+        player.battle(mobList);
+
+        System.out.println("GreenOrb Activation: " + player.getGreenOrbInEffect());
     }
 
     public void paintComponent(Graphics g) {
@@ -96,7 +117,20 @@ public class GamePanel extends JPanel implements Runnable {
         objectList.stream().forEach(x -> x.draw(g2));
         mobList.stream().forEach(x -> x.draw(g2));
         player.draw(g2);
+        ui.draw(g2);
         g2.dispose();
+    }
+
+    public int checkGameStatus() {
+        if (!player.getAlive()) {
+            return 1;
+        }
+
+        if (player.getGold() == GOLD_GOAL) {
+            return 2;
+        }
+
+        return 0;
     }
 
     public void addMob(Mob mob) {
@@ -105,5 +139,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void addObject(Object object) {
         objectList.add(object);
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

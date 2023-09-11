@@ -16,8 +16,11 @@ public class Gold extends Object {
     @Override
     public void onInteract(Player player) {
         if (!player.getPosition().equals(getPosition())) return;
-        player.addGold();
-        setExists(false);
+
+        if (getExists()) {
+            player.addGold();
+            setExists(false);
+        }
     }
 
     @Override

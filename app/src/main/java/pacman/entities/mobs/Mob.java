@@ -43,6 +43,8 @@ public abstract class Mob extends Entity implements Interactable {
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
 
+        if (!getAlive()) return;
+
         if (getSpriteNum() == 1) {
             image = mobImageLeft;
         } else if (getSpriteNum() == 2) {
